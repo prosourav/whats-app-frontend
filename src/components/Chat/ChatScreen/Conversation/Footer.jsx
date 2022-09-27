@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { EmojiEmotions, AttachFile, Mic } from "@mui/icons-material";
 import { Box, styled, InputBase } from "@mui/material";
 
@@ -33,7 +33,8 @@ const InputField = styled(InputBase)`
 const ClipIcon = styled(AttachFile)`
   transform: "rotate(40deg)";
 `;
-const Footer = () => {
+const Footer = ({sendMsg,setWrittenMsg,writtenMsg}) => {
+
   return (
     <Container>
       <EmojiEmotions />
@@ -46,6 +47,9 @@ const Footer = () => {
         <InputField
           placeholder="Type a message"
           inputProps={{ "aria-label": "search" }}
+          onChange = {({target})=>setWrittenMsg(target['value'])}
+          onKeyPress={(e) =>sendMsg(e)}
+          value={writtenMsg}
         />
       </Search>
       <Mic />
