@@ -53,4 +53,13 @@ export const fetchAllMessages = async (id) => {
   };
 };
 
+export const uploadFile = async (file) =>{
+  try{
+    const response = await axios.post(`${url}/user/conversation/upload`,file);
+    return response;
+  }catch(err){
+    console.log(err);
+  }
+};
+
 

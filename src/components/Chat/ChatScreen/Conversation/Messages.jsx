@@ -3,7 +3,7 @@ import { Box, styled } from "@mui/material";
 import Footer from "./Footer.jsx";
 import { AccountContext } from "../../../../context/AccountProvider.js";
 import { PersonContext } from "../../../../context/PersonProvider.js";
-import { sendMessage,fetchAllMessages } from "../../../../service/api.js";
+import { sendMessage,fetchAllMessages, UploadFile } from "../../../../service/api.js";
 import { useEffect } from "react";
 import Message from "./Message.jsx";
 
@@ -26,6 +26,8 @@ const Messages = ({conversation}) => {
   const [writtenMsg,setWrittenMsg] = useState('');
   const [msgFlag,setMsgFlag] = useState(false);
   const [messages,setMessages] = useState([]);
+  const [file,setFile] = useState();
+
 
   const scrollRef = useRef();
 
@@ -59,6 +61,8 @@ const Messages = ({conversation}) => {
     };
     conversation?._id && fetchAllMsgs();
   },[msgFlag,conversation?._id,person?._id]);
+
+
     
 
   return (
@@ -71,7 +75,7 @@ const Messages = ({conversation}) => {
            </Container>
           ))}
       </Component>
-      <Footer {...{sendMsg,setWrittenMsg,writtenMsg}}/>
+      <Footer {...{sendMsg,setWrittenMsg,writtenMsg,file,setFile}}/>
     </Wrapper>
   );
 };
