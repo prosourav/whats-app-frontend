@@ -54,7 +54,7 @@ const LoginDialog = () => {
   };
 
   const handlerError = () => {
-    console.warn('Getting error while login');
+    console.warn("Getting error while login");
   };
 
   return (
@@ -72,7 +72,7 @@ const LoginDialog = () => {
         </Container>
         <Box style={{ position: "relative" }}>
           <QRCode src={qrCodeImage} alt={"Qr"} />
-          <Box style={{ position: "absolute", top: "50%", marginLeft: "19%" }}>
+          <Box style={{ position: "absolute", top: "50%", marginLeft: "22%" }}>
             <GoogleLogin onSuccess={handleSuccess} onError={handlerError} />
           </Box>
         </Box>

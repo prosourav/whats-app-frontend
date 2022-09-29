@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import { EmojiEmotions, AttachFile, Mic } from "@mui/icons-material";
 import { Box, styled, InputBase } from "@mui/material";
 import { uploadFile } from "../../../../service/api";
@@ -34,38 +34,43 @@ const InputField = styled(InputBase)`
 const ClipIcon = styled(AttachFile)`
   transform: "rotate(40deg)";
 `;
-const Footer = ({sendMsg,setWrittenMsg,writtenMsg,file,setFile}) => {
-
-  const handleChange = (e) =>{
+const Footer = ({ sendMsg, setWrittenMsg, writtenMsg, file, setFile, setImage }) => {
+  const handleChange = (e) => {
     setFile(e.target.files[0]);
     setWrittenMsg(e.target.files[0].name);
   };
 
-    useEffect(()=>{
-    const setFile = async () =>{
+  useEffect(() => {
+    const setFile = async () => {
       const data = new FormData();
-      data.append("name",file.name);
-      data.append("file",file);
-      await uploadFile(data);
+      data.append("name", file.name);
+      data.append("file", file);
+      let response = await uploadFile(data);
+      setImage(response.data);
     };
     file && setFile();
-  },[file]);
+  }, [file]);
 
   return (
     <Container>
       <EmojiEmotions />
-      <label htmlFor="fileInput" style={{cursor:'pointer'}}>
+      <label htmlFor="fileInput" style={{ cursor: "pointer" }}>
         <ClipIcon />
       </label>
-      <input type="file" id="fileInput" 
-      style={{ display: "none" }} multiple onChange={(e)=>handleChange(e)}/>
+      <input
+        type="file"
+        id="fileInput"
+        style={{ display: "none" }}
+        multiple
+        onChange={(e) => handleChange(e)}
+      />
 
       <Search>
         <InputField
           placeholder="Type a message"
           inputProps={{ "aria-label": "search" }}
-          onChange = {({target})=>setWrittenMsg(target['value'])}
-          onKeyPress={(e) =>sendMsg(e)}
+          onChange={({ target }) => setWrittenMsg(target["value"])}
+          onKeyPress={(e) => sendMsg(e)}
           value={writtenMsg}
         />
       </Search>
