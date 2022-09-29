@@ -4,6 +4,8 @@ import { useContext } from "react";
 import { getUsers } from "../../../service/api";
 import SingleContact from "./SingleContact";
 import { AccountContext } from "../../../context/AccountProvider.js";
+import { SocketContext } from "../../../context/SocketProvider";
+import { ActiveUsersContext } from "../../../context/ActiveusersProvider";
 
 const Component = styled(Box)`
   height: 81vh;
@@ -19,6 +21,8 @@ const StyledDivider = styled(Divider)`
 const Contacts = ({ text }) => {
   const [users, setUsers] = useState([]);
   const { account } = useContext(AccountContext);
+  const { socket } = useContext (SocketContext);
+  const {setActiveUsers} = useContext(ActiveUsersContext);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -30,6 +34,11 @@ const Contacts = ({ text }) => {
     };
     fetchUsers();
   }, [text]);
+
+  useEffect(()=>{
+    socket.current.emit('addUser',account);
+    socket.current.on('getUsers',usr=>setActiveUsers(usr));
+  },[account]);
 
   return (
     <Component>

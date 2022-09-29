@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Box, Typography, styled } from "@mui/material";
-import { AccountContext } from "../../../../context/AccountProvider";
 import { MoreVert, Search } from "@mui/icons-material";
 import { defaultProfilePicture } from "../../../../constants/data.js";
 import { PersonContext } from "../../../../context/PersonProvider";
+import { ActiveUsersContext } from "../../../../context/ActiveusersProvider";
 
 const Header = styled(Box)`
   height: 44px;
@@ -43,7 +43,7 @@ const ChatHeader = () => {
   const { person } = useContext(PersonContext);
   const url = person?.picture || defaultProfilePicture;
 
-  const { activeUsers } = useContext(AccountContext);
+  const {activeUsers} = useContext(ActiveUsersContext);
 
   return (
     <Header>

@@ -6,6 +6,7 @@ import { PersonContext } from "../../../../context/PersonProvider.js";
 import { sendMessage, fetchAllMessages } from "../../../../service/api.js";
 import { useEffect } from "react";
 import Message from "./Message.jsx";
+import { SocketContext } from "../../../../context/SocketProvider.js";
 
 const Wrapper = styled(Box)`
   background-image: url(${"https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"});
@@ -27,12 +28,12 @@ const Messages = ({ conversation }) => {
   const [messages, setMessages] = useState([]);
   const [file, setFile] = useState("");
   const [image, setImage] = useState("");
+  const [incomingMessage, setIncomingMessage] = useState({});
 
   const scrollRef = useRef();
 
-  const { account, socket, newMessageFlag, setNewMessageFlag } =
-    useContext(AccountContext);
-
+  const { account,  newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
+  const { socket } = useContext (SocketContext);
   const { person } = useContext(PersonContext);
 
   const sendMsg = async (e) => {
@@ -56,6 +57,7 @@ const Messages = ({ conversation }) => {
           text: image,
         };
       }
+      socket.current.emit('sendMessage',msg);
       await sendMessage(msg);
       setWrittenMsg("");
       setImage("");
@@ -73,13 +75,27 @@ const Messages = ({ conversation }) => {
     conversation?._id && fetchAllMsgs();
   }, [msgFlag, conversation?._id, person?._id]);
 
+  useEffect(() => {
+    socket.current.on('getMessage', data => {
+    setIncomingMessage({...data,createdAt: Date.now()})})
+   }, []);
+
+  useEffect(() => {
+    incomingMessage && conversation?.members?.includes(incomingMessage.senderId) && 
+    setMessages((prev) => [...prev, incomingMessage]);
+  }, [incomingMessage, conversation]);
+
+  useEffect(()=>{
+    scrollRef.current?.scrollIntoView({transition:"smooth"});
+  },[messages])
+
   return (
     <Wrapper>
       <Component>
         {messages.length > 0 &&
           messages?.map((message) => (
-            <Container ref={scrollRef}>
-              <Message message={message} account={account} />
+            <Container >
+              <Message  message={message} account={account} />
             </Container>
           ))}
       </Component>
