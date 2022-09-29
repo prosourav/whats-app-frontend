@@ -32,7 +32,7 @@ const Messages = ({ conversation }) => {
 
   const scrollRef = useRef();
 
-  const { account,  newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
+  const { account } = useContext(AccountContext);
   const { socket } = useContext (SocketContext);
   const { person } = useContext(PersonContext);
 
